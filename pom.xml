@@ -6,11 +6,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>alchemystar</groupId>
-  <artifactId>lancelot</artifactId>
+  <artifactId>aroundigit</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>lancelot</name>
+  <name>aroundigit</name>
   <url>http://maven.apache.org</url>
 
   <properties>

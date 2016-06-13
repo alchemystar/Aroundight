@@ -19,11 +19,15 @@ public class GitModeResultHandler extends ResultSetHandler {
 
     @Override
     public void doHandleResultSet(ResultSet resultSet) {
-        String[] row = resultSet.getRows().get(0);
-        if ("ON".equalsIgnoreCase(row[0])) {
-            source.getBinlogContext().useGtidSet();
+        // 低版本兼容
+        if (!resultSet.getRows().isEmpty()) {
+            String[] row = resultSet.getRows().get(0);
+            if ("ON".equalsIgnoreCase(row[0])) {
+                source.getBinlogContext().useGtidSet();
+            }
         }
         source.setResultSetHander(new CheckSumResultHandler(source));
         source.write(new CommandPacket("show global variables like 'binlog_checksum'"));
+
     }
 }

@@ -10,6 +10,7 @@ import alchemystar.aroundigit.common.config.SystemConfig;
 import alchemystar.aroundigit.common.net.handler.backend.BackendConnection;
 import alchemystar.aroundigit.common.net.handler.backend.BinlogEventHandler;
 import alchemystar.aroundigit.common.net.handler.backend.codec.DecoderConfig;
+import alchemystar.aroundigit.common.net.proto.mysql.CommandPacket;
 import alchemystar.aroundigit.common.net.proto.mysql.DumpBinaryLogCommand;
 import alchemystar.aroundigit.common.net.proto.mysql.DumpBinaryLogGtidCommand;
 
@@ -28,22 +29,32 @@ public class CheckSumResultHandler extends ResultSetHandler {
 
     @Override
     public void doHandleResultSet(ResultSet resultSet) {
-        String[] row = resultSet.getRows().get(0);
+        String checksum = null;
+        if(resultSet.getRows().isEmpty()) {
+            // 低版本兼容
+            checksum = "NONE";
+        }else{
+            checksum = resultSet.getRows().get(0)[1];
+        }
         // 校验checksum
-        if (ChecksumType.valueOf(row[1].toUpperCase()) == ChecksumType.NONE) {
+        if (ChecksumType.valueOf(checksum.toUpperCase()) == ChecksumType.NONE) {
             DecoderConfig.checksumType = ChecksumType.NONE;
-        } else if (ChecksumType.valueOf(row[1].toUpperCase()) == ChecksumType.CRC32) {
+            setBinlogEventHandler();
+            // 发送dump命令
+            if (source.getBinlogContext().getGtidSet() == null) {
+                sendDumpBinaryLog();
+            } else {
+                sendDumpBinaryLogGtid();
+            }
+        } else if (ChecksumType.valueOf(checksum.toUpperCase()) == ChecksumType.CRC32) {
             DecoderConfig.checksumType = ChecksumType.CRC32;
+            source.setResultSetHander(new SetCheckSumCmdHandler(source));
+            // set binlog_checksum
+            source.writeNoSelect(new CommandPacket("set @master_binlog_checksum= @@global.binlog_checksum"));
         } else {
-            throw new RuntimeException("Unknow checksum type:" + ChecksumType.valueOf(row[1].toUpperCase()));
+            throw new RuntimeException("Unknow checksum type:" + ChecksumType.valueOf(checksum.toUpperCase()));
         }
-        setBinlogEventHandler();
-        // 发送dump命令
-        if (source.getBinlogContext().getGtidSet() == null) {
-            sendDumpBinaryLog();
-        } else {
-            sendDumpBinaryLogGtid();
-        }
+
     }
 
     // begin to parse binlog event

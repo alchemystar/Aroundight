@@ -220,6 +220,15 @@ public class MySQLMessage {
         return s;
     }
 
+    public String readStringWithCrc32() {
+        if (position >= length - 4) {
+            return null;
+        }
+        String s = new String(data, position, length - position -4);
+        position = length;
+        return s;
+    }
+
     public String readString(String charset) throws UnsupportedEncodingException {
         if (position >= length) {
             return null;

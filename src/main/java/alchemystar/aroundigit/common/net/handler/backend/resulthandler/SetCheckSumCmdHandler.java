@@ -27,7 +27,6 @@ public class SetCheckSumCmdHandler extends ResultSetHandler {
 
     @Override
     public void doOkay(OkPacket okPacket) {
-        source.getBinlogContext().setChecksumType(ChecksumType.NONE);
         setBinlogEventHandler();
         // 发送dump命令
         if (source.getBinlogContext().getGtidSet() == null) {

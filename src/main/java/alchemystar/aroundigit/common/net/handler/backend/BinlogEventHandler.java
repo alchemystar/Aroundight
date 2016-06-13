@@ -53,7 +53,7 @@ public class BinlogEventHandler extends ChannelHandlerAdapter {
     private void handleError(BinaryPacket bin) {
         ErrorPacket error = new ErrorPacket();
         error.read(bin);
-        logger.error("Get binlog Event failed,errMsg=" + error.message);
-        throw new RuntimeException("Get binlog Event failed,errMsg=" + error.message);
+        logger.error("Get binlog Event failed,errMsg=" + new String(error.message));
+        throw new RuntimeException("Get binlog Event failed,errMsg=" +new String(error.message));
     }
 }

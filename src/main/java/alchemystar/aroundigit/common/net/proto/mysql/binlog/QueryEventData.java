@@ -3,6 +3,8 @@
  */
 package alchemystar.aroundigit.common.net.proto.mysql.binlog;
 
+import alchemystar.aroundigit.common.net.handler.backend.codec.DecoderConfig;
+import alchemystar.aroundigit.common.net.handler.backend.resulthandler.ChecksumType;
 import alchemystar.aroundigit.common.net.proto.mysql.MySQLMessage;
 
 /**
@@ -26,7 +28,11 @@ public class QueryEventData implements EventData {
         int statusVarLength = mm.readUB2(); // status variables block
         statusVar = mm.readBytes(statusVarLength);
         database = mm.readStringWithNull();
-        sql = mm.readString();
+        if (DecoderConfig.checksumType == ChecksumType.CRC32) {
+            sql = mm.readStringWithCrc32();
+        } else {
+            sql = mm.readString();
+        }
     }
 
     public long getThreadId() {

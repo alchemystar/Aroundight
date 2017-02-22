@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Aroundight.iml" filepath="$PROJECT_DIR$/Aroundight.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aroundigit.iml" filepath="$PROJECT_DIR$/aroundigit.iml" />
     </modules>
   </component>
 </project>

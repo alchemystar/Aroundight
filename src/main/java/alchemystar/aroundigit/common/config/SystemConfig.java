@@ -16,13 +16,17 @@ public class SystemConfig {
     public static final int BackendInitialSize = 10;
     public static final int BackendMaxSize = 20;
     public static final int BackendInitialWaitTime = 60;
+    // public static final String MySqlHost = "127.0.0.1";
+    // public static final String MySqlHost = "cp01-qa-bu-09-qa47.cp01.baidu.com";
     public static final String MySqlHost = "127.0.0.1";
-
-   // public static final int ServerPort = 8090;
-    public static final int MySqlPort = 3306;
-   // public static final String UserName = "root";
-    public static final String PassWord = "123123123";
-
+    // public static final int ServerPort = 8090;
+   // public static final int ServerPort = 8806;
+    // public static final int MySqlPort = 3306;
+    public static final int MySqlPort = 8806;
+    // public static final String UserName = "root";
+    public static final String UserName = "yourName";
+    // public static final String PassWord = "123123123";
+    public static final String PassWord = "yourPassword";
     public static final long ServerId = 2; //1
     // public static final int MySqlPort = 8080;
     // public static final String UserName = "pay";
